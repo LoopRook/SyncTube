@@ -12,7 +12,7 @@
 	"allowProxyIps": true,
 	"localNetworkOnly": false,
 	"templateUrl": "https://youtube.com/playlist?list=PL9FiZUDVMu9tc_85frYognMOVFC_-VkSX",
-	"youtubeApiKey": "AIzaSyDTk1OPRI9cDkAK_BKsBcv10DQCHse-QaA",
+	"youtubeApiKey": "AIzaSyAt4wjJf1_498gJNzDZZ6qgvj7Kdx5L33c",
 	"youtubePlaylistLimit": 50,
 	"cacheStorageLimitGiB": 3.0,
 	"permissions": {
