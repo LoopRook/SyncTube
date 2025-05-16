@@ -22,6 +22,7 @@ import js.npm.ws.Server as WSServer;
 import js.npm.ws.WebSocket;
 import json2object.ErrorUtils;
 import json2object.JsonParser;
+import server.cache.Cache;
 import sys.FileSystem;
 import sys.io.File;
 
@@ -30,6 +31,8 @@ private typedef MainOptions = {
 }
 
 class Main {
+	public static inline var MIN_PASSWORD_LENGTH = 4;
+	public static inline var MAX_PASSWORD_LENGTH = 50;
 	static inline var VIDEO_START_MAX_DELAY = 3000;
 	static inline var VIDEO_SKIP_DELAY = 1000;
 	static inline var FLASHBACKS_COUNT = 50;
@@ -41,14 +44,14 @@ class Main {
 	public final userDir:String;
 	public final logsDir:String;
 	public final config:Config;
+	public final isNoState:Bool;
 
-	final isNoState:Bool;
 	final verbose:Bool;
 	final statePath:String;
 	var wss:WSServer;
 	final localIp:String;
 	var globalIp:String;
-	final playersCacheSupport:Array<PlayerType> = [];
+	final playersCacheSupport:Array<PlayerType> = [RawType];
 	var port:Int;
 	final userList:UserList;
 
@@ -369,6 +372,10 @@ class Main {
 		trace('Admin $name removed.');
 	}
 
+	public function hasAdmins():Bool {
+		return userList.admins.length > 0;
+	}
+
 	public function replayLog(events:Array<ServerEvent>):Void {
 		final timer = new Timer(1000);
 		timer.run = () -> {
@@ -577,7 +584,7 @@ class Main {
 			case Login:
 				final name = data.login.clientName.trim();
 				final lcName = name.toLowerCase();
-				if (badNickName(lcName)) {
+				if (isBadClientName(lcName)) {
 					serverMessage(client, "usernameError");
 					send(client, {type: LoginError});
 					return;
@@ -632,7 +639,7 @@ class Main {
 
 			case Message:
 				if (!checkPermission(client, WriteChatPerm)) return;
-				var text = data.message.text;
+				var text = data.message.text.trim();
 				if (text.length == 0) return;
 				if (text.length > config.maxMessageLength) {
 					text = text.substr(0, config.maxMessageLength);
@@ -686,6 +693,11 @@ class Main {
 					addVideo();
 				} else {
 					switch item.playerType {
+						case RawType:
+							cache.cacheRawVideo(client, item.url, (name) -> {
+								item = item.withUrl(cache.getFileUrl(name));
+								addVideo();
+							});
 						case YoutubeType:
 							cache.cacheYoutubeVideo(client, item.url, (name) -> {
 								item = item.withUrl(cache.getFileUrl(name));
@@ -1065,7 +1077,7 @@ class Main {
 	final matchHtmlChars = ~/[&^<>'"]/;
 	final matchGuestName = ~/guest [0-9]+/;
 
-	public function badNickName(name:String):Bool {
+	public function isBadClientName(name:String):Bool {
 		if (name.length > config.maxLoginLength) return true;
 		if (name.length == 0) return true;
 		if (matchHtmlChars.match(name)) return true;
@@ -1146,5 +1158,9 @@ class Main {
 			if (!checkPermission(client, LockPlaylistPerm)) return true;
 		}
 		return false;
+	}
+
+	public function hasPlaylistUrl(url:String):Bool {
+		return videoList.exists(item -> item.url == url);
 	}
 }
