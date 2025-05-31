@@ -1,15 +1,15 @@
 package server;
 
-import js.node.fs;
-import js.node.path;
+import js.node.Fs;
+import js.node.Path;
 
 class DbManager {
     var db:Dynamic;
 
     public function new(path:String) {
-        var dir = path.split('/').slice(0, -1).join('/');
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
+        var dir = Path.dirname(path);
+        if (!Fs.existsSync(dir)) {
+            Fs.mkdirSync(dir, { recursive: true });
         }
 
         var sqlite3 = untyped __js__("require('sqlite3').verbose()");
