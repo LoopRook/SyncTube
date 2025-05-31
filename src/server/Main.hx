@@ -95,7 +95,11 @@ class Main {
 		statePath = '$userDir/state.json';
 		logsDir = '$userDir/logs';
 		cacheDir = '$userDir/res/cache';
+		// Database stuff
 		db = new DbManager('/data/synctube.sqlite3');
+		db.addPlaylist("Test Playlist " + Std.string(Date.now().getTime()), "Testing persistence");
+db.getPlaylists();
+
 
 
 		// process.on("exit", exit);
