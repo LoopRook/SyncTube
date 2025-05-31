@@ -54,15 +54,21 @@ class DbManager {
         });
     }
 
-    public function getPlaylists():Void {
+        public function getPlaylists():Void {
         ensureReady(() -> {
             db.all('SELECT * FROM playlists', function(err:Dynamic, rows:Dynamic):Void {
                 if (err != null) trace("Get playlists error: " + err);
                 else {
                     trace("Current playlists:");
-                    for (playlist in rows) {
+                    // Cast rows to Array<Dynamic> so we can iterate
+                    var list = cast rows:Array<Dynamic>;
+                    for (playlist in list) {
                         trace("ID: " + playlist.id + ", Name: " + playlist.name + ", Description: " + playlist.description);
                     }
+                }
+            });
+        });
+    }
                 }
             });
         });
