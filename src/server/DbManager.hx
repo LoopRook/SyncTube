@@ -2,7 +2,6 @@ package server;
 
 import js.node.Fs;
 import js.node.Path;
-import Reflect;
 
 class DbManager {
     var db:Dynamic;
@@ -21,7 +20,6 @@ class DbManager {
 
         var sqlite3 = untyped __js__("require('sqlite3').verbose()");
 
-        // Define callback function in Haxe
         var onOpenCallback = function(err:Dynamic):Void {
             if (err != null) {
                 trace("DB error: " + err);
@@ -39,8 +37,7 @@ class DbManager {
             });
         };
 
-        // Call JS constructor explicitly with Reflect.callMethod
-        db = Reflect.callMethod(sqlite3, Reflect.field(sqlite3, "Database"), [path, onOpenCallback]);
+        db = untyped __js__("new sqlite3.Database(path, onOpenCallback)");
     }
 
     private function ensureReady(cb:Void->Void):Void {
