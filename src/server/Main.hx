@@ -95,7 +95,7 @@ class Main {
 		statePath = '$userDir/state.json';
 		logsDir = '$userDir/logs';
 		cacheDir = '$userDir/res/cache';
-		db = new DbManager('$rootDir/synctube.sqlite3');
+		db = new DbManager('/data/synctube.sqlite3');
 
 
 		// process.on("exit", exit);
