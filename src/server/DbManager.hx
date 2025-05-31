@@ -19,17 +19,14 @@ class DbManager {
         }
 
         var sqlite3 = untyped __js__("require('sqlite3').verbose()");
-        
-        // Define callback function in untyped
-        var onOpenCallback = untyped __js__("function(err) { \
-            if (err) { console.log('DB error: ' + err); return; } \
-            console.log('DB ready: ' + path); \
-            db.run('CREATE TABLE IF NOT EXISTS playlists (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT)', [], function(err2) { \
-                if (err2) { console.log('Error creating table: ' + err2); return; } \
-            }); \
-        }");
+        var onOpenCallback = untyped __js__("function(err) {\\n" +
+            "if (err) { console.log('DB error: ' + err); return; }\\n" +
+            "console.log('DB ready: ' + path);\\n" +
+            "db.run('CREATE TABLE IF NOT EXISTS playlists (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT)', [], function(err2) {\\n" +
+            "if (err2) { console.log('Error creating table: ' + err2); return; }\\n" +
+            "});\\n" +
+            "}");
 
-        // Create database passing callback
         db = untyped __js__("new sqlite3.Database(path, onOpenCallback)", { path : path, onOpenCallback : onOpenCallback });
     }
 
