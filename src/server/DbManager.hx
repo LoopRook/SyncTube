@@ -12,6 +12,24 @@ class DbManager {
         untyped __js__('require("fs").mkdirSync(path, { recursive: true })');
     }
 
+    // Define the open callback separately
+    private var onOpenCallback = function(err:Dynamic):Void {
+        if (err != null) {
+            trace("DB error: " + err);
+            return;
+        }
+        trace("DB ready");
+        db.run('CREATE TABLE IF NOT EXISTS playlists (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT)', [], function(err2:Dynamic):Void {
+            if (err2 != null) {
+                trace("Error creating table: " + err2);
+                return;
+            }
+            ready = true;
+            for (cb in onReadyCallbacks) cb();
+            onReadyCallbacks = [];
+        });
+    };
+
     public function new(path:String) {
         var dir = Path.dirname(path);
         if (!Fs.existsSync(dir)) {
@@ -19,15 +37,7 @@ class DbManager {
         }
 
         var sqlite3 = untyped __js__("require('sqlite3').verbose()");
-        var onOpenCallback = untyped __js__("function(err) {\\n" +
-            "if (err) { console.log('DB error: ' + err); return; }\\n" +
-            "console.log('DB ready: ' + path);\\n" +
-            "db.run('CREATE TABLE IF NOT EXISTS playlists (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT)', [], function(err2) {\\n" +
-            "if (err2) { console.log('Error creating table: ' + err2); return; }\\n" +
-            "});\\n" +
-            "}");
-
-        db = untyped __js__("new sqlite3.Database(path, onOpenCallback)", { path : path, onOpenCallback : onOpenCallback });
+        db = untyped __js__("new sqlite3.Database(path, onOpenCallback)", { path: path, onOpenCallback: onOpenCallback });
     }
 
     private function ensureReady(cb:Void->Void):Void {
@@ -37,7 +47,7 @@ class DbManager {
 
     public function addPlaylist(name:String, description:String):Void {
         ensureReady(() -> {
-            db.run('INSERT INTO playlists (name, description) VALUES (?, ?)', [name, description], function(err) {
+            db.run('INSERT INTO playlists (name, description) VALUES (?, ?)', [name, description], function(err:Dynamic):Void {
                 if (err != null) trace("Add playlist error: " + err);
                 else trace("Playlist added!");
             });
@@ -46,7 +56,7 @@ class DbManager {
 
     public function getPlaylists():Void {
         ensureReady(() -> {
-            db.all('SELECT * FROM playlists', function(err, rows) {
+            db.all('SELECT * FROM playlists', function(err:Dynamic, rows:Dynamic):Void {
                 if (err != null) trace("Get playlists error: " + err);
                 else trace(rows);
             });
