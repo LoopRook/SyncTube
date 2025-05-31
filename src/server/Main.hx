@@ -1,5 +1,6 @@
 package server;
 
+import server.DbManager;
 import Client.ClientData;
 import Types.Config;
 import Types.FlashbackItem;
@@ -76,6 +77,7 @@ class Main {
 		This allows seamless reconnection without rewinds
 		to stopped server time.
 	**/
+	var db:DbManager;
 	var emptyRoomCallbackTimer:Null<Timer>;
 	var isServerPause = false;
 
@@ -93,6 +95,8 @@ class Main {
 		statePath = '$userDir/state.json';
 		logsDir = '$userDir/logs';
 		cacheDir = '$userDir/res/cache';
+		db = new DbManager('$rootDir/synctube.sqlite3');
+
 
 		// process.on("exit", exit);
 		process.on("SIGINT", exit); // ctrl+c
