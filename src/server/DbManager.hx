@@ -1,18 +1,13 @@
 package server;
 
-import js.node.sqlite3.Database;
-
 class DbManager {
-    var db:Database;
+    var db:Dynamic;
 
     public function new(path:String) {
-        db = new Database(path, function(err) {
-            if (err != null) trace("DB error: " + err);
-            else {
-                trace("DB ready: " + path);
-                db.run('CREATE TABLE IF NOT EXISTS playlists (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT)');
-            }
-        });
+        var sqlite3 = untyped __js__("require('sqlite3').verbose()");
+        db = untyped __js__("new sqlite3.Database(path)");
+        trace("DB ready: " + path);
+        db.run('CREATE TABLE IF NOT EXISTS playlists (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT)');
     }
 
     public function addPlaylist(name:String, description:String):Void {
