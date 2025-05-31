@@ -79,7 +79,7 @@ class DbManager {
                         trace("Get playlists error: " + err);
                     } else {
                         trace("Current playlists:");
-                        var list = cast rows : Array<Dynamic>;
+                        var list = cast rows:Array<Dynamic>;
                         for (playlist in list) {
                             trace("ID: " + playlist.id + ", Name: " + playlist.name + ", Description: " + playlist.description);
                         }
