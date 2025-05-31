@@ -58,7 +58,12 @@ class DbManager {
         ensureReady(() -> {
             db.all('SELECT * FROM playlists', function(err:Dynamic, rows:Dynamic):Void {
                 if (err != null) trace("Get playlists error: " + err);
-                else trace(rows);
+                else {
+                    trace("Current playlists:");
+                    for (playlist in rows) {
+                        trace("ID: " + playlist.id + ", Name: " + playlist.name + ", Description: " + playlist.description);
+                    }
+                }
             });
         });
     }
