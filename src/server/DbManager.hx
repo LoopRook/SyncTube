@@ -19,15 +19,15 @@ class DbManager {
         }
 
         var sqlite3 = untyped __js__("require('sqlite3').verbose()");
-        db = untyped __js__("""
-new sqlite3.Database(path, function(err) {
-    if(err) { console.log('DB error: ' + err); return; }
-    console.log('DB ready: ' + path);
-    db.run('CREATE TABLE IF NOT EXISTS playlists (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT)', [], function(err2) {
-        if(err2) { console.log('Error creating table: ' + err2); return; }
-    });
-});
-""");
+        db = untyped __js__(
+            "new sqlite3.Database(path, function(err) {" +
+            "if(err) { console.log('DB error: ' + err); return; }" +
+            "console.log('DB ready: ' + path);" +
+            "db.run('CREATE TABLE IF NOT EXISTS playlists (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT)', [], function(err2) {" +
+            "if(err2) { console.log('Error creating table: ' + err2); return; }" +
+            "});" +
+            "})"
+        );
     }
 
     private function ensureReady(cb:Void->Void):Void {
