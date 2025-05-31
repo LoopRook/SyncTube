@@ -2,3 +2,4 @@
 build-client.hxml
 --next
 build-server.hxml
+-lib hxnodejs
