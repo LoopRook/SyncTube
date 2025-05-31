@@ -10,7 +10,7 @@ COPY build-*.hxml ./
 COPY package*.json ./
 COPY default-config.json ./
 
-RUN npm ci;
+RUN npm install;
 RUN haxelib install all --always
 RUN haxe build-all.hxml
 
