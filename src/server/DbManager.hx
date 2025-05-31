@@ -19,7 +19,7 @@ class DbManager {
         }
 
         var sqlite3 = untyped __js__("require('sqlite3').verbose()");
-        db = untyped __js__("new sqlite3.Database(path, $callback)", { callback : (err:Dynamic) -> {
+        db = untyped __js__("new sqlite3.Database(path, $0)", [(err:Dynamic) -> {
             if (err != null) {
                 trace("DB error: " + err);
                 return;
@@ -34,7 +34,7 @@ class DbManager {
                 for (cb in onReadyCallbacks) cb();
                 onReadyCallbacks = [];
             });
-        }});
+        }]);
     }
 
     private function ensureReady(cb:Void->Void):Void {
