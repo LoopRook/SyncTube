@@ -6,10 +6,14 @@ import js.node.Path;
 class DbManager {
     var db:Dynamic;
 
+    function mkdirRecursive(path:String):Void {
+        untyped __js__('require("fs").mkdirSync(path, { recursive: true })');
+    }
+
     public function new(path:String) {
         var dir = Path.dirname(path);
         if (!Fs.existsSync(dir)) {
-            Fs.mkdirSync(dir, { recursive: true });
+            mkdirRecursive(dir);
         }
 
         var sqlite3 = untyped __js__("require('sqlite3').verbose()");
