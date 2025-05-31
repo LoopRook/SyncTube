@@ -97,8 +97,8 @@ class Main {
 		cacheDir = '$userDir/res/cache';
 		// Database stuff
 		db = new DbManager('/data/synctube.sqlite3');
-		db.addPlaylist("Test Playlist " + Std.string(Date.now().getTime()), "Testing persistence");
-db.getPlaylists();
+		// db.addPlaylist("Test Playlist " + Std.string(Date.now().getTime()), "Testing persistence");
+//db.getPlaylists();
 
 
 
