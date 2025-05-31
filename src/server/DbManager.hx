@@ -12,24 +12,6 @@ class DbManager {
         untyped __js__('require("fs").mkdirSync(path, { recursive: true })');
     }
 
-    // Define the open callback separately
-    private var onOpenCallback = function(err:Dynamic):Void {
-        if (err != null) {
-            trace("DB error: " + err);
-            return;
-        }
-        trace("DB ready");
-        db.run('CREATE TABLE IF NOT EXISTS playlists (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT)', [], function(err2:Dynamic):Void {
-            if (err2 != null) {
-                trace("Error creating table: " + err2);
-                return;
-            }
-            ready = true;
-            for (cb in onReadyCallbacks) cb();
-            onReadyCallbacks = [];
-        });
-    };
-
     public function new(path:String) {
         var dir = Path.dirname(path);
         if (!Fs.existsSync(dir)) {
@@ -37,7 +19,26 @@ class DbManager {
         }
 
         var sqlite3 = untyped __js__("require('sqlite3').verbose()");
-        db = untyped __js__("new sqlite3.Database(path, onOpenCallback)", { path: path, onOpenCallback: onOpenCallback });
+
+        // Define the callback inside constructor, after db is created
+        var onOpenCallback = function(err:Dynamic):Void {
+            if (err != null) {
+                trace("DB error: " + err);
+                return;
+            }
+            trace("DB ready");
+            db.run('CREATE TABLE IF NOT EXISTS playlists (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT)', [], function(err2:Dynamic):Void {
+                if (err2 != null) {
+                    trace("Error creating table: " + err2);
+                    return;
+                }
+                ready = true;
+                for (cb in onReadyCallbacks) cb();
+                onReadyCallbacks = [];
+            });
+        };
+
+        db = untyped __js__("new sqlite3.Database(path, $0)", [onOpenCallback]);
     }
 
     private function ensureReady(cb:Void->Void):Void {
