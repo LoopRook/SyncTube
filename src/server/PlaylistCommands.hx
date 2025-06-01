@@ -1,16 +1,12 @@
-package server;
-
-import server.DbManager;
-
 class PlaylistCommands {
-    public static var db:DbManager; // Must be set at startup!
+    public static var db:DbManager;
 
     public static function handle(userId:String, message:String):Bool {
-        if (!message.startsWith("/playlist")) return false;
+        if (!message.startsWith("/pl")) return false;
 
         var args = message.split(" ");
         if (args.length < 3) {
-            sendSystemMessage("Usage:\n/playlist add <name>\n/playlist switch <name>\n/playlist addvideo <name> <url>");
+            sendSystemMessage("Usage:\n/pl add <name>\n/pl switch <name>\n/pl addvideo <name> <url>");
             return true;
         }
 
@@ -33,15 +29,14 @@ class PlaylistCommands {
                 if (url != null && db.addVideoToPlaylist(playlistName, url))
                     sendSystemMessage("Video added to playlist '" + playlistName + "'.");
                 else
-                    sendSystemMessage("Usage: /playlist addvideo <name> <url>");
+                    sendSystemMessage("Usage: /pl addvideo <name> <url>");
             default:
-                sendSystemMessage("Unknown subcommand for /playlist.");
+                sendSystemMessage("Unknown subcommand for /pl.");
         }
         return true;
     }
 
     static function sendSystemMessage(msg:String) {
-        // Replace this with your actual system message broadcast if you want users to see it.
         trace('[System] ' + msg);
     }
 }
