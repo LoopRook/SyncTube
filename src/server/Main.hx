@@ -1,4 +1,5 @@
 package server;
+PlaylistCommands.db = db;
 import server.PlaylistCommands;
 import server.DbManager;
 import Client.ClientData;
@@ -656,7 +657,7 @@ class Main {
 				sendClientListExcept(client);
 
 			case Message:
-				if (PlaylistCommands.handle(client.group.toString(), client.name, data.message)) return;
+				if (PlaylistCommands.handle(client.name, data.message.text)) return;
 				if (!checkPermission(client, WriteChatPerm)) return;
 				var text = data.message.text.trim();
 				if (text.length == 0) return;
