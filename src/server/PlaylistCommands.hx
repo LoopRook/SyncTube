@@ -1,5 +1,9 @@
+package server;
+
+import server.DbManager;
+
 class PlaylistCommands {
-    public static var db:DbManager;
+    public static var db:DbManager; // Must be set at startup!
 
     public static function handle(userId:String, message:String):Bool {
         if (!message.startsWith("/pl")) return false;
@@ -37,6 +41,7 @@ class PlaylistCommands {
     }
 
     static function sendSystemMessage(msg:String) {
+        // TODO: Replace trace with actual server broadcast logic to the room
         trace('[System] ' + msg);
     }
 }
