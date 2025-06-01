@@ -1,15 +1,16 @@
 package server;
 
-import server.DbManager; // Update path if needed
+import server.DbManager;
 
 class PlaylistCommands {
-    public static function handle(roomId:String, userId:String, message:String):Bool {
-        // Only handle /playlist commands
+    public static var db:DbManager; // Must be set at startup!
+
+    public static function handle(userId:String, message:String):Bool {
         if (!message.startsWith("/playlist")) return false;
 
         var args = message.split(" ");
         if (args.length < 3) {
-            sendSystemMessage(roomId, "Usage:\n/playlist add <name>\n/playlist switch <name>\n/playlist addvideo <name> <url>");
+            sendSystemMessage("Usage:\n/playlist add <name>\n/playlist switch <name>\n/playlist addvideo <name> <url>");
             return true;
         }
 
@@ -19,30 +20,28 @@ class PlaylistCommands {
 
         switch(subcommand) {
             case "add":
-                if (DbManager.addPlaylist(roomId, playlistName))
-                    sendSystemMessage(roomId, "Playlist '" + playlistName + "' created!");
+                if (db.addPlaylist(playlistName))
+                    sendSystemMessage("Playlist '" + playlistName + "' created!");
                 else
-                    sendSystemMessage(roomId, "Could not create playlist '" + playlistName + "'.");
+                    sendSystemMessage("Could not create playlist '" + playlistName + "'.");
             case "switch":
-                if (DbManager.switchPlaylist(roomId, playlistName))
-                    sendSystemMessage(roomId, "Switched to playlist '" + playlistName + "'.");
+                if (db.switchPlaylist(playlistName))
+                    sendSystemMessage("Switched to playlist '" + playlistName + "'.");
                 else
-                    sendSystemMessage(roomId, "Could not switch to playlist '" + playlistName + "'.");
+                    sendSystemMessage("Could not switch to playlist '" + playlistName + "'.");
             case "addvideo":
-                if (url != null && DbManager.addVideoToPlaylist(roomId, playlistName, url))
-                    sendSystemMessage(roomId, "Video added to playlist '" + playlistName + "'.");
+                if (url != null && db.addVideoToPlaylist(playlistName, url))
+                    sendSystemMessage("Video added to playlist '" + playlistName + "'.");
                 else
-                    sendSystemMessage(roomId, "Usage: /playlist addvideo <name> <url>");
+                    sendSystemMessage("Usage: /playlist addvideo <name> <url>");
             default:
-                sendSystemMessage(roomId, "Unknown subcommand for /playlist.");
+                sendSystemMessage("Unknown subcommand for /playlist.");
         }
-
-        return true; // handled!
+        return true;
     }
 
-    static function sendSystemMessage(roomId:String, msg:String) {
-        // Replace this with your actual room broadcast or system message logic.
-        // Example: RoomManager.broadcastSystem(roomId, msg);
-        trace('[Room ' + roomId + '][System] ' + msg);
+    static function sendSystemMessage(msg:String) {
+        // Replace this with your actual system message broadcast if you want users to see it.
+        trace('[System] ' + msg);
     }
 }
