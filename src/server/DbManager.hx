@@ -13,7 +13,6 @@ class DbManager {
     function init():Void {
         conn.request("CREATE TABLE IF NOT EXISTS playlists (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE);");
         conn.request("CREATE TABLE IF NOT EXISTS playlist_videos (id INTEGER PRIMARY KEY AUTOINCREMENT, playlist_id INTEGER, url TEXT);");
-        // Track the single active playlist (for your one room)
         conn.request("CREATE TABLE IF NOT EXISTS active_playlist (id INTEGER PRIMARY KEY, playlist_id INTEGER);");
     }
 
