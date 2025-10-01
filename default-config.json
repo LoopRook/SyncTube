@@ -11,6 +11,8 @@
 	"localAdmins": true,
 	"allowProxyIps": true,
 	"localNetworkOnly": false,
+	"sslKeyPemPath": "",
+	"sslCertPemPath": "",
 	"templateUrl": "https://youtube.com/playlist?list=PL9FiZUDVMu9tc_85frYognMOVFC_-VkSX",
 	"youtubeApiKey": "AIzaSyAt4wjJf1_498gJNzDZZ6qgvj7Kdx5L33c",
 	"youtubePlaylistLimit": 50,

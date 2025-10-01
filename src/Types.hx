@@ -42,6 +42,8 @@ typedef Config = {
 	localAdmins:Bool,
 	allowProxyIps:Bool,
 	localNetworkOnly:Bool,
+	sslKeyPemPath:String,
+	sslCertPemPath:String,
 	templateUrl:String,
 	youtubeApiKey:String,
 	youtubePlaylistLimit:Int,
@@ -294,4 +296,5 @@ enum abstract WsEventType(String) {
 	var UpdatePlaylist;
 	var TogglePlaylistLock;
 	var Dump;
+	var CrashTest;
 }
